@@ -26,7 +26,6 @@ class ServerProtocol(DatagramProtocol):
 		self.active_sessions = {}
 	
 	def generate_game_code(self):
-		return "AAAAA"
 		length = 5
 		code = ""
 		for _ in range(length):
@@ -110,7 +109,7 @@ if __name__ == '__main__':
 	try:
 		port = 20400
 		reactor.listenUDP(port, ServerProtocol())
-		log("\n=============================================")
+		log("\n============================================")
 		log("Server started at", datetime.now())
 		log(f"Listening on *:{port}")
 		reactor.run()
