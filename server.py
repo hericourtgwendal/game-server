@@ -71,7 +71,9 @@ class ServerProtocol(DatagramProtocol):
 		if msg_type == "rs":
 			# register session
 			game_code = self.generate_game_code()
-			self.transport.write(bytes(f"ok:{c_port}:{game_code}", "utf-8"), address)
+			msg = f"ok:{c_port}:{game_code}"
+			log("Message sent:", msg)
+			self.transport.write(bytes(msg, "utf-8"), address)
 			self.create_session(game_code, c_ip, c_port)
 
 		elif msg_type == "rc":
@@ -80,9 +82,12 @@ class ServerProtocol(DatagramProtocol):
 			c_session = split[1]
 			session = self.get_session(c_session)
 			if session is None:
-				self.transport.write(bytes(f"ex","utf-8"), address)
+				msg = "ex";
+				self.transport.write(bytes(msg,"utf-8"), address)
 			else:
-				self.transport.write(bytes(f"ok:{c_port}:{session.host_ip}:{session.host_port}","utf-8"), address)
+				msg = f"ok:{c_port}:{session.host_ip}:{session.host_port}"
+				self.transport.write(bytes(msg,"utf-8"), address)
+			log("Message sent:", msg)
 
 		elif msg_type == "ts":
 			# terminate session
